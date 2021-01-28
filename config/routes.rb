@@ -3,6 +3,7 @@ Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
       post "auth/login", to: "auth#login"
+      get "auth/auto_login", to: "auth#auto_login"
     end
   end
 end

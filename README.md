@@ -6,6 +6,12 @@
   <li>Ruby on Rails 6.1.1</li>
 </ul>
 
+<h2>Authentication & Authorization</h2>
+
+This project uses JWT to authenticate and authorize users to access the resources using <code>bcrypt</code> and <code>jwt</code> gems. For this to work is necessary to set the environment variable <code>JWT_SECRET</code>.
+Since we only have two types of users (standard and admin) to manage the access of certain resources we simply have to check the role the user has.
+
+
 <h2>Development</h2>
 
 For a faster enviroment setup we use <a href="https://www.vagrantup.com/">Vagrant</a>. The repository <a href="https://github.com/RedLincoln/vagrant_rails">vagrant_rails</a> provides a <code>Vagrantfile</code> with the tecnologies needed.
@@ -23,6 +29,10 @@ All enpoints starts with <code>/api/v1</code>
   <tr>
     <th>Enpoint</th>
     <th>Functionality</th>
+  </tr>
+  <tr>
+    <td>GET /auth/login</td>
+    <td>Authentication, contains jwt token</td>
   </tr>
   <tr>
     <td>GET /customers</td>

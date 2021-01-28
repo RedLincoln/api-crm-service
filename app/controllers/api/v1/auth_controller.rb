@@ -1,5 +1,6 @@
 class Api::V1::AuthController < ApplicationController
-  before_action :user_params
+  before_action :user_params, except: [:auto_login]
+  before_action :authorized, except: [:login]
 
   def login 
     @user = User.find_by(username: params[:username])  
@@ -10,6 +11,10 @@ class Api::V1::AuthController < ApplicationController
     else
       render json: {error: 'Invalid username or password'}, status: :unauthorized
     end
+  end
+
+  def auto_login
+    render json: @user
   end
 
   private 
