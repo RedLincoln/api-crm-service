@@ -5,7 +5,12 @@ class Api::V1::CustomersController < ApplicationController
   end
 
   def show
-    render json: {error: 'Customer not found'}, status: :not_found
+    begin
+      customer = Customer.find(params['id'])  
+      render json: { customer: customer }
+    rescue ActiveRecord::RecordNotFound
+      render json: { error: 'Customer not found'}, status: :not_found
+    end
   end
 
   def create
