@@ -15,6 +15,14 @@ RSpec.describe "Api::V1::Customers", type: :request do
         expect(response).to have_http_status(200)
       end
     end
+
+    context 'GET /customers/:id' do
+      before { get customer_path(0)}
+
+      it 'status code' do
+        expect(response).to have_http_status(404)
+      end
+    end
     
   end
 

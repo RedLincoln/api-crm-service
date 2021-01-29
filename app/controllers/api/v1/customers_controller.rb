@@ -5,7 +5,7 @@ class Api::V1::CustomersController < ApplicationController
   end
 
   def show
-
+    render json: {error: 'Customer not found'}, status: :not_found
   end
 
   def create
