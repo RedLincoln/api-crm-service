@@ -5,7 +5,7 @@ RSpec.describe "Api::V1::Customers", type: :request do
   describe 'initial state' do
 
     context 'GET /customers' do
-      before{get customers_path}
+      before { get customers_path }
 
       it 'no customers' do
         expect(json['customers']).to be_empty
@@ -16,6 +16,27 @@ RSpec.describe "Api::V1::Customers", type: :request do
       end
     end
     
+  end
+
+  describe 'with customers stored' do
+    let(:customers) {create_list(:customer, 10)}
+
+    context 'GET /customers' do
+      before {
+        customers
+        get customers_path 
+      }
+      
+      it 'return all customers' do
+        expect(json['customers'].size).to be(10)
+      end
+
+      it 'status code' do
+        expect(response).to have_http_status(200)
+      end
+
+    end
+
   end
 
 
