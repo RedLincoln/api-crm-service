@@ -35,7 +35,13 @@ class Api::V1::CustomersController < ApplicationController
   end
 
   def destroy
-
+    begin
+      customer = Customer.find(params['id'])
+      customer.destroy
+      render json: { customer: link_photo(customer)}, status: :ok
+    rescue ActiveRecord::RecordNotFound
+      render json: { error: 'Not Found'}, status: :not_found
+    end
   end
 
 

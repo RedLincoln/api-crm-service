@@ -4,11 +4,14 @@ RSpec.describe "Api::V1::Customers PUT /customers/:id", type: :request do
   let(:user) { create(:user) }
   let(:customer_name) { 'old customer name' }
   let(:new_customer_name) { 'new customer name' }
+  let(:total_customers) { 3 }
+  let(:customers) { create_list(:customer, total_customers - 1)}
   let(:customer) { create(:customer, name: customer_name) }
+  
   
   context 'user authenticated' do
 
-    before{ user; customer } 
+    before{ user; customer; customers } 
 
     context 'customer exists' do
 
@@ -17,7 +20,7 @@ RSpec.describe "Api::V1::Customers PUT /customers/:id", type: :request do
       }
 
       it 'customer is updated' do
-        expect(Customer.count).to be(1)
+        expect(Customer.count).to be(total_customers)
         expect(Customer.find(customer.id).name).to eq(new_customer_name)
         expect(Customer.find(customer.id).modifier_id).to eq(user.id)
         expect(json).to include('customer')
@@ -31,7 +34,8 @@ RSpec.describe "Api::V1::Customers PUT /customers/:id", type: :request do
     context 'customer does not exists' do
 
       before {
-        put customer_path(customer.id + 1), params: { name: new_customer_name }, headers: authorization_header(user)
+        not_valid_customer_id = Customer.order('id').last.try(:id).to_i + 1
+        put customer_path(not_valid_customer_id), params: { name: new_customer_name }, headers: authorization_header(user)
       }
 
       it 'status code' do
