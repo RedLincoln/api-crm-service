@@ -22,7 +22,7 @@ RSpec.describe "Api::V1::Customers", type: :request do
         end
       end
 
-      context 'GET /customers/:id' do
+      context 'GET /customer/:id' do
         before { get customer_path(0), headers: authorization_header(user)}
 
         it 'status code' do
@@ -97,7 +97,7 @@ RSpec.describe "Api::V1::Customers", type: :request do
 
       end
 
-      context 'GET /customers/:id' do
+      context 'GET /customer/:id' do
 
         describe 'with valid customer id' do
           before { get customer_path(valid_customer_id), headers: authorization_header(user) }
@@ -128,5 +128,33 @@ RSpec.describe "Api::V1::Customers", type: :request do
     end
   end
 
+
+  context 'user not authenticated' do
+
+    it 'GET /customers' do
+      get customers_path
+      expect(response).to have_http_status(:unauthorized)
+    end
+
+    it 'GET /customer/:id' do
+      get customer_path(0)
+      expect(response).to have_http_status(:unauthorized)
+    end
+
+    it 'POST /customers' do
+      post customers_path
+      expect(response).to have_http_status(:unauthorized)
+    end
+
+    it 'PUT /customer/:id' do
+      put customer_path(0)
+      expect(response).to have_http_status(:unauthorized)
+    end
+
+    it 'DELETE /customer/:id' do
+      delete customer_path(0)
+      expect(response).to have_http_status(:unauthorized)
+    end
+  end
 
 end
