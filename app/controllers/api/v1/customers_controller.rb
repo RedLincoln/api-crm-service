@@ -19,6 +19,8 @@ class Api::V1::CustomersController < ApplicationController
     if customer.save
       customer.update(creator_id: @user.id, modifier_id: @user.id)
       render json: { customer: customer }, status: :created
+    else
+      render json: { error: 'Bad Request' }, status: :bad_request
     end
   end
 
