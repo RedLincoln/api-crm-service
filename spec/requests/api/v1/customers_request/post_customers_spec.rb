@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe "Api::V1::Customers GET /customers", type: :request do
+RSpec.describe "Api::V1::Customers POST /customers", type: :request do
   let(:user) { create(:user) }
   
   context 'user authenticated' do

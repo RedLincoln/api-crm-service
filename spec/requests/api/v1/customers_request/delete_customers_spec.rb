@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe "Api::V1::Customers GET /customers", type: :request do
+RSpec.describe "Api::V1::Customers DELETE /customers/:id", type: :request do
   let(:user) { create(:user) }
   let(:total_customers) {10}
   let(:customers) {create_list(:customer, total_customers)}
@@ -26,7 +26,7 @@ RSpec.describe "Api::V1::Customers GET /customers", type: :request do
       delete customer_path(0)
       expect(response).to have_http_status(:unauthorized)
     end
-    
+
   end
 
 end

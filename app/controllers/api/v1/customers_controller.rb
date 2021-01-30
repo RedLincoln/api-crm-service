@@ -8,7 +8,7 @@ class Api::V1::CustomersController < ApplicationController
   def show
     begin
       customer = Customer.find(params['id'])  
-      render json: { customer: customer }
+      render json: { customer: link_photo(customer) }
     rescue ActiveRecord::RecordNotFound
       render json: { error: 'Customer not found'}, status: :not_found
     end
@@ -18,14 +18,20 @@ class Api::V1::CustomersController < ApplicationController
     customer = Customer.new(customer_params)
     if customer.save
       customer.update(creator_id: @user.id, modifier_id: @user.id)
-      render json: { customer: customer }, status: :created
+      render json: { customer: link_photo(customer) }, status: :created
     else
       render json: { error: 'Bad Request' }, status: :bad_request
     end
   end
 
   def update
-
+    begin
+      customer = Customer.find(params['id'])
+      customer.update(customer_params.merge(modifier_id: @user.id))
+      render json: { customer: link_photo(customer)}, status: :ok
+    rescue ActiveRecord::RecordNotFound
+      render json: { error: 'Not Found'}, status: :not_found
+    end
   end
 
   def destroy
