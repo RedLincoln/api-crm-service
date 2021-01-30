@@ -23,6 +23,13 @@ RSpec.describe "Api::V1::Customers", type: :request do
         expect(response).to have_http_status(404)
       end
     end
+
+    context 'POST /customers' do
+      before {
+        photo = fixture_file_upload(Rails.root.join('spec', 'factories', 'img', 'face_test.jpg'))
+        post customers_path, params: {name: 'name', surname: 'surname', photo: photo}
+      }
+    end
     
   end
 

@@ -9,7 +9,7 @@ RSpec.describe Customer, type: :model do
 
     it 'attach valid image' do
       customer.photo.attach(
-        io: File.open(Rails.root.join('spec', 'factories', 'face_test.jpg')),
+        io: File.open(Rails.root.join('spec', 'factories', 'img', 'face_test.jpg')),
         filename: 'face_test.jpg',
         content_type: 'image/jpeg'
       )

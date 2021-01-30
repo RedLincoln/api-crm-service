@@ -1,6 +1,6 @@
 class Api::V1::AuthController < ApplicationController
   before_action :user_params, except: [:auto_login]
-  before_action :authorized, except: [:login]
+  before_action :authenticate, except: [:login]
 
   def login 
     @user = User.find_by(username: params[:username])  

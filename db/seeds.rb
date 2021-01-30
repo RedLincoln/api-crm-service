@@ -12,6 +12,7 @@ Customer.destroy_all()
 
 user1 = User.create!(username: "redlincoln", password: "password")
 user2 = User.create!(username: 'Jazmyn2', password: "password2")
+User.create!(username: 'admin_user', password: 'password')
 
 customer1 = Customer.create!(name: 'Stanly', surname: 'Herman', creator_id: user1.id, modifier_id: user1.id)
 customer1.photo.attach(
