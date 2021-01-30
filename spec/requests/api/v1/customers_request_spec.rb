@@ -18,7 +18,7 @@ RSpec.describe "Api::V1::Customers", type: :request do
         end
         
         it 'status code' do
-          expect(response).to have_http_status(200)
+          expect(response).to have_http_status(:ok)
         end
       end
 
@@ -26,15 +26,35 @@ RSpec.describe "Api::V1::Customers", type: :request do
         before { get customer_path(0), headers: authorization_header(user)}
 
         it 'status code' do
-          expect(response).to have_http_status(404)
+          expect(response).to have_http_status(:not_found)
         end
       end
 
       context 'POST /customers' do
+        let(:customer_name) { 'name '}
+        let(:customer_surname) { 'surname' }
         before {
-          photo = fixture_file_upload(Rails.root.join('spec', 'factories', 'img', 'face_test.jpg'))
-          post customers_path, params: {name: 'name', surname: 'surname', photo: photo, headers: authorization_header}
+          photo = Rack::Test::UploadedFile.new(
+            File.open(Rails.root.join('spec', 'factories', 'img', 'face_test.jpg')))
+          post customers_path,
+            params: {name: customer_name, surname: customer_surname, photo: photo},
+            headers: authorization_header(user)
         }
+
+        it 'create customer with valid fields' do 
+          expect(Customer.count).to eq(1)
+
+          expect(Customer.first.name).to eq(customer_name)
+          expect(Customer.first.surname).to eq(customer_surname)
+          expect(Customer.first.photo).to be_attached
+          expect(Customer.first.creator_id).to eq(user.id)
+          expect(Customer.first.modifier_id).to eq(user.id)
+        end
+
+        it 'status code' do
+          expect(response).to have_http_status(:created)
+        end
+
       end
       
     end
@@ -54,7 +74,7 @@ RSpec.describe "Api::V1::Customers", type: :request do
         end
 
         it 'status code' do
-          expect(response).to have_http_status(200)
+          expect(response).to have_http_status(:ok)
         end
 
       end
@@ -70,7 +90,7 @@ RSpec.describe "Api::V1::Customers", type: :request do
           end
           
           it 'status code' do
-            expect(response).to have_http_status(200)
+            expect(response).to have_http_status(:ok)
           end
         end
 
@@ -81,7 +101,7 @@ RSpec.describe "Api::V1::Customers", type: :request do
           }
 
           it 'status code' do
-            expect(response).to have_http_status(404)
+            expect(response).to have_http_status(:not_found)
           end
 
         end

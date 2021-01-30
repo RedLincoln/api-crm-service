@@ -14,7 +14,7 @@ RSpec.describe "Api::V1::Auths", type: :request do
       }
 
       it 'status code' do
-        expect(response).to have_http_status(200)
+        expect(response).to have_http_status(:ok)
       end
 
       it 'content' do
@@ -30,7 +30,7 @@ RSpec.describe "Api::V1::Auths", type: :request do
       }
 
       it 'status code' do
-        expect(response).to have_http_status(401)
+        expect(response).to have_http_status(:unauthorized)
       end
 
       it 'content' do

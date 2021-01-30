@@ -15,7 +15,11 @@ class Api::V1::CustomersController < ApplicationController
   end
 
   def create
-
+    customer = Customer.new(customer_params)
+    if customer.save
+      customer.update(creator_id: @user.id, modifier_id: @user.id)
+      render json: { customer: customer }, status: :created
+    end
   end
 
   def update
@@ -33,5 +37,9 @@ class Api::V1::CustomersController < ApplicationController
     customer.as_json.tap do |hash|
       hash['photo'] = customer.photo.attached? ? url_for(customer.photo) : nil
     end
+  end
+
+  def customer_params
+    params.permit(:name, :surname, :photo)
   end
 end
