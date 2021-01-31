@@ -1,5 +1,9 @@
 class ApplicationController < ActionController::API
 
+  def current_user 
+    @user
+  end
+
   def logged_in_user
     decoded = JsonWebTokens.decode_token(request)
     if decoded

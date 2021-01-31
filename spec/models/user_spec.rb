@@ -8,4 +8,7 @@ RSpec.describe User, type: :model do
     it { create(:user); should validate_uniqueness_of(:username)}
   end
 
+  describe 'assosiations' do
+    it { should belong_to(:role) } 
+  end
 end
