@@ -4,6 +4,6 @@ class Customer < ApplicationRecord
   validates :name, presence: true
   validates :surname, presence: true
 
-  belongs_to :creator_id, class_name: 'User', foreign_key: 'user_id'
-  belongs_to :modifier_id, class_name: 'User', foreign_key: 'user_id'
+  belongs_to :creator, class_name: 'User'
+  belongs_to :modifier, class_name: 'User'
 end

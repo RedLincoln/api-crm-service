@@ -6,38 +6,43 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 
+User.destroy_all
+Role.destroy_all
+Customer.destroy_all
 
-User.destroy_all()
-Customer.destroy_all()
 
-user1 = User.create!(username: "redlincoln", password: "password")
-user2 = User.create!(username: 'Jazmyn2', password: "password2")
-User.create!(username: 'admin_user', password: 'password')
+standard = Role.create!(name: 'standard', description: 'The user can manage basic resources')
+admin = Role.create!(name: 'admin', description: 'The user can manage other users')
 
-customer1 = Customer.create!(name: 'Stanly', surname: 'Herman', creator_id: user1.id, modifier_id: user1.id)
+user1 = User.create!(username: "redlincoln", password: "password", role: standard)
+user2 = User.create!(username: 'Jazmyn2', password: "password2", role: standard)
+User.create!(username: 'admin_user', password: 'password', role: admin)
+
+
+customer1 = Customer.create!(name: 'Stanly', surname: 'Herman', creator: user1, modifier: user1)
 customer1.photo.attach(
   io: File.open(Rails.root.join('dev', 'img', 'hombre1.jpg')),
   filename: 'hombre1.jpg',
   content_type: 'image/jpeg'
 )
 
-customer2 = Customer.create!(name: 'Buster', surname: 'Von', creator_id: user1.id, modifier_id: user1.id)
+customer2 = Customer.create!(name: 'Buster', surname: 'Von', creator: user1, modifier: user1)
 customer2.photo.attach(
   io: File.open(Rails.root.join('dev', 'img', 'hombre2.jpg')),
   filename: 'hombre2.jpg',
   content_type: 'image/jpeg'
 )
 
-customer3 = Customer.create!(name: 'Granville', surname: 'Klein', creator_id: user2.id, modifier_id: user2.id)
+customer3 = Customer.create!(name: 'Granville', surname: 'Klein', creator: user2, modifier: user2)
 customer3.photo.attach(
   io: File.open(Rails.root.join('dev', 'img', 'mujer1.jpg')),
   filename: 'mujer1.jpg',
   content_type: 'image/jpeg'
 )
 
-Customer.create!(name: 'Cristian', surname: 'D\'Amore', creator_id: user2.id, modifier_id: user2.id)
+Customer.create!(name: 'Cristian', surname: 'D\'Amore', creator: user2, modifier: user2)
 
-customer5 = Customer.create!(name: 'Ruth', surname: 'Bernhard', creator_id: user1.id, modifier_id: user1.id)
+customer5 = Customer.create!(name: 'Ruth', surname: 'Bernhard', creator: user1, modifier: user1)
 customer5.photo.attach(
   io: File.open(Rails.root.join('dev', 'img', 'mujer2.jpg')),
   filename: 'mujer2.jpg',

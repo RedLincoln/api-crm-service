@@ -18,6 +18,12 @@ RSpec.describe Customer, type: :model do
     end
   end
 
+  describe 'associations' do
+    it { should belong_to(:creator).class_name('User') } 
+    it { should belong_to(:modifier).class_name('User') } 
+  end
+
+
   describe 'defaut' do
     it 'have no photo attached' do
       expect(customer.photo).to_not be_attached

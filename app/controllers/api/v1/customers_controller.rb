@@ -15,9 +15,8 @@ class Api::V1::CustomersController < ApplicationController
   end
 
   def create
-    customer = Customer.new(customer_params)
+    customer = Customer.new(customer_params.merge({ creator: @user, modifier: @user }))
     if customer.save
-      customer.update(creator_id: @user.id, modifier_id: @user.id)
       render json: { customer: link_photo(customer) }, status: :created
     else
       render json: { error: 'Bad Request' }, status: :bad_request
@@ -27,7 +26,7 @@ class Api::V1::CustomersController < ApplicationController
   def update
     begin
       customer = Customer.find(params['id'])
-      customer.update(customer_params.merge(modifier_id: @user.id))
+      customer.update(customer_params.merge(modifier: @user))
       render json: { customer: link_photo(customer)}, status: :ok
     rescue ActiveRecord::RecordNotFound
       render json: { error: 'Not Found'}, status: :not_found
