@@ -9,6 +9,9 @@ gem 'rails', '~> 6.1.1'
 
 gem 'pg'
 
+# Authorization
+gem 'cancancan'
+
 # Use Puma as the app server
 gem 'puma', '~> 5.0'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
