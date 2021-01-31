@@ -1,7 +1,7 @@
 class ApplicationController < ActionController::API
 
-  def current_user 
-    @user
+  rescue_from CanCan::AccessDenied do
+    render json: {error: 'Access denied' }, status: :forbidden
   end
 
   def logged_in_user
