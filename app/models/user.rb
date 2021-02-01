@@ -9,6 +9,14 @@ class User < ApplicationRecord
   def as_json(*)
     super(except: [:password_digest])
   end
+
+  def standard?
+    role.name.eql? 'standard'
+  end
+
+  def admin?
+    role.name.eql? 'admin'
+  end
 end
 
 

@@ -25,7 +25,6 @@ RSpec.describe "Api::V1::Users POST /users", type: :request do
       end
 
       it 'status code' do
-        puts json
         expect(response).to have_http_status(:created)
       end
 

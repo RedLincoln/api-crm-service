@@ -21,7 +21,7 @@ class Api::V1::UsersController < ApplicationController
     if @user
       render json: { error: "User with username #{user_params[:username]} already exists"}, status: :conflict
     else
-      role = Role.exists?(name: user_params[:name]) ? Role.find_by(name: user_params[:role]) : Role.find_by(name: 'standard')
+      role = Role.get_role_by_name(user_params[:role])
       @user = User.create(user_params.merge(role: role))
       render json: { user: @user }, status: :created
     end
