@@ -38,6 +38,13 @@ class Api::V1::UsersController < ApplicationController
 
   end
 
+  def destroy 
+    @user = User.find(params[:id])
+    @user.delete
+    render json: { message: 'User destroy' }
+  end
+
+
   private
 
   def user_params

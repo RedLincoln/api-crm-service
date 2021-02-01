@@ -34,8 +34,8 @@ class Api::V1::CustomersController < ApplicationController
 
   def destroy
     @customer = Customer.find(params['id'])
-    @customer.destroy
-    render json: { }, status: :ok
+    @customer.delete
+    render json: { message: 'Customer destroyed' }
   end
 
   
