@@ -29,12 +29,12 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: "2.6"
-      - name: env variables
+      - name: Build and run test
         env:
           RAILS_ENV: test
         run: |
           sudo apt-get -yqq install libpq-dev
-          gem install bunlder
+          gem install bundler
           bundle install --jobs 4 --retry 3
           bundle exec rails db:create
           bundle exec rails db:migrate
