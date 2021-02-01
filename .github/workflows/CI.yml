@@ -32,6 +32,7 @@ jobs:
       - name: Build and run test
         env:
           RAILS_ENV: test
+          JWT_SECRET: secret
         run: |
           sudo apt-get -yqq install libpq-dev
           gem install bundler
