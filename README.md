@@ -1,6 +1,5 @@
 <h1>REST API for a CRM interface</h1>
 
-
 <ul>
   <li>Ruby 3.0</li>
   <li>Ruby on Rails 6.1.1</li>
@@ -9,13 +8,39 @@
 <h2>Authentication & Authorization</h2>
 
 This project uses JWT to authenticate and authorize users to access the resources using <code>bcrypt</code> and <code>jwt</code> gems. For this to work is necessary to set the environment variable <code>JWT_SECRET</code>.
-Since we only have two types of users (standard and admin) to manage the access of certain resources we simply have to check the role the user has.
 
+For authorization the gem <code>cancancan</code> is being used to manage permissions. The table <code>role</code> have been created to store the roles information and to make it easier to add new roles if necessary.
 
 <h2>Development</h2>
 
-For a faster enviroment setup we use <a href="https://www.vagrantup.com/">Vagrant</a>. The repository <a href="https://github.com/RedLincoln/vagrant_rails">vagrant_rails</a> provides a <code>Vagrantfile</code> with the tecnologies needed.
+For a faster environment setup we use <a href="https://www.vagrantup.com/">Vagrant</a>. The repository <a href="https://github.com/RedLincoln/vagrant_rails">vagrant_rails</a> provides a <code>Vagrantfile</code> with the technologies needed. Once the vagrant machine is running follow the next steps :
 
+```
+# in vagrant machine
+# set JWT_SECRET enviroment variable (.bashrc)
+
+$ > cd /vagrant
+$ > git clone https://github.com/RedLincoln/api-crm-service.git
+$ > cd api-crm-service
+$ > bundle install
+$ > rails db:create
+$ > rails db:migrate
+$ > rails db:seed
+
+
+# to run test
+$ > rspec
+
+
+# to start the server. http://localhost:3000
+$ > rails s -b 0.0.0.0
+
+
+```
+
+<h2>Tests</h2>
+
+<a href="https://rspec.info/">RSpec</a> is the test engine being used for testing. The tests are under the <code>spec</code> folder.
 
 <h2>Endpoints</h2>
 
@@ -84,4 +109,3 @@ Admin users can use standard user endpoints as well as the following
     <td>Delete existing user</td>
   </tr>
 </table>
-

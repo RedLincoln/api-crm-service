@@ -7,7 +7,9 @@ class User < ApplicationRecord
   belongs_to :role
 
   def as_json(*)
-    super(except: [:password_digest])
+    super(except: [:password_digest]).tap do |hash|
+      hash[:role] = role.as_json
+    end
   end
 
   def standard?

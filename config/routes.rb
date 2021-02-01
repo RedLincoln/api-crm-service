@@ -3,7 +3,6 @@ Rails.application.routes.draw do
   scope module: 'api', path: 'api' do
     scope module: 'v1', path: 'v1' do
       post "auth/login", to: "auth#login", as: 'login'
-      get "auth/auto_login", to: "auth#auto_login", as: 'auto_login'
       resources :customers
       resources :users
     end
