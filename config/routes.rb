@@ -5,6 +5,7 @@ Rails.application.routes.draw do
       post "auth/login", to: "auth#login", as: 'login'
       get "auth/auto_login", to: "auth#auto_login", as: 'auto_login'
       resources :customers
+      resources :users
     end
   end
 end
