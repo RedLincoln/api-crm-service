@@ -19,17 +19,32 @@ class Api::V1::UsersController < ApplicationController
   def create
     @user = User.find_by(username: user_params[:username])
     if @user
-      render json: { error: "User with username #{user_params[:username]} already exists"}, status: :conflict
+      render json: { error: @user.errors}, status: :conflict
     else
-      role = Role.get_role_by_name(user_params[:role])
-      @user = User.create(user_params.merge(role: role))
+      @user = User.create(user_params)
       render json: { user: @user }, status: :created
     end
+  end
+
+  def update
+    @user = User.find(params[:id])    
+    @user.update(user_params)
+
+    if @user.valid?
+      render json: { user: @user }, status: :ok
+    else
+      render json: { error: @user.errors }, status: :conflict
+    end
+
   end
 
   private
 
   def user_params
-    params.permit(:username, :password, :role)
+    if params.has_key?(:role)
+      params.permit(:username, :password, :role).merge(role: Role.get_role_by_name(params[:role]))    
+    else
+      params.permit(:username, :params, :role)
+    end
   end
 end
