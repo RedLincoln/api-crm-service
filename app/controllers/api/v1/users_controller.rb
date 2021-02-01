@@ -1,5 +1,6 @@
 class Api::V1::UsersController < ApplicationController
   before_action :authenticate
+  load_and_authorize_resource
   
   rescue_from ActiveRecord::RecordNotFound do
     render json: { error: 'Not Found'}, status: :not_found
@@ -46,6 +47,10 @@ class Api::V1::UsersController < ApplicationController
 
 
   private
+
+  def current_ability
+    @current_ability ||= UserAbility.new(@user)  
+  end
 
   def user_params
     if params.has_key?(:role)
