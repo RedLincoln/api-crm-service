@@ -4,6 +4,17 @@ class ApplicationController < ActionController::API
     render json: {error: 'Access denied' }, status: :forbidden
   end
 
+  rescue_from ActiveRecord::RecordNotFound do
+    render json: { error: 'Not Found'}, status: :not_found
+  end
+
+
+  def authenticate
+    render json: {error: 'Unauthorized'}, status: :unauthorized unless !!logged_in_user
+  end
+
+  private
+
   def logged_in_user
     decoded = JsonWebTokens.decode_token(request)
     if decoded
@@ -12,12 +23,4 @@ class ApplicationController < ActionController::API
     end
   end
 
-  def logged_in?
-    !!logged_in_user
-  end
-
-
-  def authenticate
-    render json: {error: 'Unauthorized'}, status: :unauthorized unless logged_in?
-  end
 end

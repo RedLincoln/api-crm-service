@@ -2,10 +2,6 @@ class Api::V1::UsersController < ApplicationController
   before_action :authenticate
   load_and_authorize_resource
   
-  rescue_from ActiveRecord::RecordNotFound do
-    render json: { error: 'Not Found'}, status: :not_found
-  end
-  
   def index
     @users = User.all
     render json: { users: @users }
