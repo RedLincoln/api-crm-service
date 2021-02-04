@@ -1,14 +1,11 @@
 class Api::V1::AuthController < ApplicationController
-  before_action :user_params
 
   def login 
-    @user = User.find_by(username: user_params[:username])  
-
-    if @user && @user.authenticate(user_params[:password])
-      token = JsonWebTokens.encode_token({user_id: @user.id})
-      render json: { user: @user, token: token}
+    body = AuthApiAuthentication.get_user_token(user_params)
+    if body
+      render json: { access_token: body["access_token"]}
     else
-      render json: {error: 'Invalid username or password'}, status: :unauthorized
+      render json: { error: 'Invalid username or password' }, status: :unauthorized
     end
   end
 

@@ -19,7 +19,8 @@ class Api::V1::UsersController < ApplicationController
       render json: { error: @user.errors}, status: :conflict
     else
       @user = User.create(user_params)
-      render json: { user: @user }, status: :created
+      render json: { user: @user }, status: :created if @user.persisted?
+      render json: { error: 'Internal error' }, status: :internal_server_error
     end
   end
 
@@ -50,9 +51,9 @@ class Api::V1::UsersController < ApplicationController
 
   def user_params
     if params.has_key?(:role)
-      params.permit(:username, :password, :role).merge(role: Role.get_role_by_name(params[:role]))    
+      params.permit(:email, :username, :password, :role).merge(role: Role.get_role_by_name(params[:role]))    
     else
-      params.permit(:username, :params, :role)
+      params.permit(:email, :username, :params, :role)
     end
   end
 end

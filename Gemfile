@@ -24,6 +24,7 @@ gem 'bcrypt', '~> 3.1.13'
 gem 'rack-cors'
 gem 'jwt'
 
+gem 'httparty'
 # Use Active Storage variant
 # gem 'image_processing', '~> 1.2'
 

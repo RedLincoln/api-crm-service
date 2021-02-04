@@ -15,11 +15,15 @@ class ApplicationController < ActionController::API
 
   private
 
+  def auth_token
+    request.headers['Authorization']
+  end
+
   def logged_in_user
-    decoded = JsonWebTokens.decode_token(request)
-    if decoded
-      user_id = decoded[0]['user_id']
-      @user = User.find(user_id)
+    if auth_token
+      token = auth_token.split(' ').last
+      userinfo = AuthApiAuthentication.get_userinfo(token)
+      @user = User.find_by(email: userinfo["email"])
     end
   end
 
