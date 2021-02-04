@@ -42,10 +42,8 @@ class AuthApiManagment
           verify_email: false
         }.to_json
       })
-      
-      puts response
-
-      if response.code == 201
+        
+      if response.code == 201 || response.code == 409
         JSON.parse(response.body)
       else
         nil
@@ -64,6 +62,9 @@ class AuthApiManagment
     end
 
     def update_user(uid:, update_params:)
+      filtered_params = filter_valid_update_fields(update_params)
+      return nil unless filtered_params.to_h.size > 0
+
       response = Auth0Conf.patch(URI.encode("/api/v2/users/#{uid}"), {
         headers: {
           "content-type": "application/json",

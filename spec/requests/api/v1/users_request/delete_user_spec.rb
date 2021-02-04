@@ -11,12 +11,14 @@ RSpec.describe "Api::V1::Users", type: :request do
 
     before {
       admin; user
+      user_authenticated(admin.email)
     }
 
     context 'user does exist' do
 
       before {
-        delete user_path(valid_user_id), headers: authorization_header(admin)
+        delete_user_auth0
+        delete user_path(valid_user_id), headers: authorization_header
       }
 
       it 'deletes the user' do
@@ -32,8 +34,9 @@ RSpec.describe "Api::V1::Users", type: :request do
 
     context 'user doest not exists' do
       before {
+        delete_user_doesnt_exists_auth0
         not_valid_id = User.order('id').last.try(:id).to_i + 1
-        delete user_path(not_valid_id), headers: authorization_header(admin)
+        delete user_path(not_valid_id), headers: authorization_header
       }
 
       it 'status code' do
@@ -47,6 +50,7 @@ RSpec.describe "Api::V1::Users", type: :request do
   context 'not authenticated admin' do
 
     before {
+      user_not_authenticated
       delete user_path(0)
     }
 

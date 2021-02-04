@@ -16,7 +16,7 @@ RSpec.describe "Api::V1::Customers DELETE /customers/:id", type: :request do
     context 'customer exist' do
 
       before {
-        delete customer_path(valid_customer_id), headers: { "Authorization" => "token"}
+        delete customer_path(valid_customer_id), headers: authorization_header
       }
 
       it 'customer is deleted' do
@@ -34,7 +34,7 @@ RSpec.describe "Api::V1::Customers DELETE /customers/:id", type: :request do
       
       before {
         not_valid_id = Customer.order('id').last.try(:id).to_i + 1
-        delete customer_path(not_valid_id), headers: { "Authorization" => "token"}
+        delete customer_path(not_valid_id), headers: authorization_header
       }
 
       it 'status code' do

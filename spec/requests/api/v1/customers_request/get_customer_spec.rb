@@ -14,7 +14,7 @@ RSpec.describe "Api::V1::Customers GET /customers/:id", type: :request do
     } 
 
     context 'initial state' do
-      before { get customer_path(0), headers: { "Authorization" => "token"} }
+      before { get customer_path(0), headers: authorization_header }
 
       it 'status code' do
         expect(response).to have_http_status(:not_found)
@@ -24,7 +24,7 @@ RSpec.describe "Api::V1::Customers GET /customers/:id", type: :request do
     context 'customers stored' do
 
       describe 'with valid customer id' do
-        before { get customer_path(valid_customer_id), headers: { "Authorization" => "token"}}
+        before { get customer_path(valid_customer_id), headers: authorization_header}
 
         it 'content' do
           expect(json).to include('customer')
@@ -39,7 +39,7 @@ RSpec.describe "Api::V1::Customers GET /customers/:id", type: :request do
       describe 'without valid customer id' do
         before {
           not_valid_customer_id = customers.sort_by(&:id).last.try(:id).to_i + 1
-          get customer_path(not_valid_customer_id), headers: { "Authorization" => "token"}
+          get customer_path(not_valid_customer_id), headers: authorization_header
         }
 
         it 'status code' do

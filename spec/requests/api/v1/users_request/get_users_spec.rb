@@ -10,7 +10,8 @@ RSpec.describe "Api::V1::Users GET /users", type: :request do
 
     before {
       users
-      get users_path, headers: authorization_header(admin)
+      user_authenticated(admin.email)
+      get users_path, headers: authorization_header
     }
 
     it 'returns all users' do
@@ -26,6 +27,7 @@ RSpec.describe "Api::V1::Users GET /users", type: :request do
   context 'not authenticated admin' do
 
     before {
+      user_not_authenticated
       get users_path
     }
 

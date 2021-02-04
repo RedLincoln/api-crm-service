@@ -17,13 +17,15 @@ RSpec.describe "Api::V1::Users PUT /users/:id", type: :request do
 
     before {
       admin; user
+      user_authenticated(admin.email)
     }
 
     context 'user does no exists' do
 
       before {
+        update_user_doesnt_exists_auth0
         not_valid_id = User.order('id').last.try(:id).to_i + 1
-        put user_path(not_valid_id), params: { username: valid_username }, headers: authorization_header(admin)
+        put user_path(not_valid_id), params: { username: valid_username }, headers: authorization_header
       }
 
       it 'status code' do
@@ -36,7 +38,8 @@ RSpec.describe "Api::V1::Users PUT /users/:id", type: :request do
       context 'valid update params' do
 
         before { 
-          put user_path(valid_user_id), params: { username: valid_username, role: 'admin' }, headers: authorization_header(admin)
+          update_user_auth0
+          put user_path(valid_user_id), params: { username: valid_username, role: 'admin' }, headers: authorization_header
         }
 
         it 'updated user' do
@@ -55,7 +58,8 @@ RSpec.describe "Api::V1::Users PUT /users/:id", type: :request do
       context 'not valid update params' do
 
         before { 
-          put user_path(valid_user_id), params: { username: not_valid_username }, headers: authorization_header(admin)
+          update_user_auth0
+          put user_path(valid_user_id), params: { username: not_valid_username }, headers: authorization_header
         }
 
         it 'status code' do
@@ -71,6 +75,7 @@ RSpec.describe "Api::V1::Users PUT /users/:id", type: :request do
   context 'not authenticated admin' do
 
     before {
+      user_not_authenticated
       put user_path(0)
     }
 

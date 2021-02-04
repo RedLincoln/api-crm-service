@@ -14,7 +14,7 @@ RSpec.describe "Api::V1::Customers GET /customers", type: :request do
     } 
 
     context 'initial state' do
-      before { get customers_path, headers: { "Authorization" => "token"} }
+      before { get customers_path, headers: authorization_header }
 
       it 'no customers' do
         expect(json['customers']).to be_empty
@@ -27,7 +27,7 @@ RSpec.describe "Api::V1::Customers GET /customers", type: :request do
 
     context 'customers stored' do
         
-      before { customers; get customers_path, headers: { "Authorization" => "token"} }
+      before { customers; get customers_path, headers: authorization_header }
 
       it 'return all customers' do
         expect(json['customers'].size).to be(total_customers)

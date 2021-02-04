@@ -12,7 +12,8 @@ RSpec.describe "Api::V1::Users GET /users/:id", type: :request do
     context 'user exists' do
 
       before {
-        get user_path(valid_user_id), headers: authorization_header(admin)
+        user_authenticated(admin.email)
+        get user_path(valid_user_id), headers: authorization_header
       }
 
       it 'returns the user requested' do
@@ -29,7 +30,8 @@ RSpec.describe "Api::V1::Users GET /users/:id", type: :request do
 
       before {
         not_valid_id = User.order('id').last.try(:id).to_i + 1
-        get user_path(not_valid_id), headers: authorization_header(admin)
+        user_authenticated(admin.email)
+        get user_path(not_valid_id), headers: authorization_header
       }
 
       it 'status code' do
@@ -42,6 +44,7 @@ RSpec.describe "Api::V1::Users GET /users/:id", type: :request do
   context 'not authenticated admin' do
 
     before {
+      user_not_authenticated
       get user_path(0)
     }
 

@@ -16,15 +16,15 @@ class Api::V1::UsersController < ApplicationController
   def create
     if have_required_params_for_create
       body = AuthApiManagment.create_user(user_params)
-      if body
+      if body && (body.include? "statusCode")
+        render json: { error: 'The user already exists' }, status: :conflict
+      elsif body
         @user = User.create(user_params.merge(uid: body["user_id"]))  
         render json: { user: @user }, status: :created if @user.persisted?
         render json: { error: 'Cant create user', message: 'Internal server error' }, status: :internal_server_error unless @user.persisted?
-      elsif body["statusCode"] == :conflict
-        render json: { error: 'The user already exists' }, status: :conflict
       end
     else
-      render json: { error: 'Email, username and password are required'}
+      render json: { error: 'Email, username and password are required'}, status: :bad_request
     end
   end
 
@@ -33,8 +33,9 @@ class Api::V1::UsersController < ApplicationController
     @user.update(user_params)
 
     if @user.valid?
-      AuthApiManagment.update_user(uid: @user.uid, update_params: user_params) unless params_only_contains_role
-      render json: { user: @user }, status: :ok
+      body =  AuthApiManagment.update_user(uid: @user.uid, update_params: user_params)
+      render json: { error: 'Cant change too many fields at the same time' }, status: :bad_request unless body
+      render json: { user: @user }, status: :ok if body
     else
       render json: { error: @user.errors }, status: :conflict
     end  
@@ -57,12 +58,6 @@ class Api::V1::UsersController < ApplicationController
     @current_ability ||= UserAbility.new(@user)  
   end
 
-
-  def params_only_contains_role
-    !((user_params.has_key? :email) ||
-      (user_params.has_key? :username) ||
-      (user_params.has_key? :password))
-  end
 
   def have_required_params_for_create
     (user_params.has_key? :email) &&

@@ -18,7 +18,7 @@ RSpec.describe "Api::V1::Customers POST /customers", type: :request do
           File.open(Rails.root.join('spec', 'factories', 'img', 'face_test.jpg')))
         post customers_path,
           params: {name: customer_name, surname: customer_surname, photo: photo},
-          headers: { "Authorization" => "token"}
+          headers: authorization_header
       }
 
       it '' do 
@@ -38,7 +38,7 @@ RSpec.describe "Api::V1::Customers POST /customers", type: :request do
     
     context 'create customer with bad params' do
       before {
-        post customers_path, headers: { "Authorization" => "token"}
+        post customers_path, headers: authorization_header
       }
 
       it '' do

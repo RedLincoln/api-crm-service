@@ -19,7 +19,7 @@ RSpec.describe "Api::V1::Customers PUT /customers/:id", type: :request do
     context 'customer exists' do
 
       before {
-        put customer_path(customer.id), params: { name: new_customer_name }, headers: { "Authorization" => "token"}
+        put customer_path(customer.id), params: { name: new_customer_name }, headers: authorization_header
       }
 
       it 'customer is updated' do
@@ -38,7 +38,7 @@ RSpec.describe "Api::V1::Customers PUT /customers/:id", type: :request do
 
       before {
         not_valid_customer_id = Customer.order('id').last.try(:id).to_i + 1
-        put customer_path(not_valid_customer_id), params: { name: new_customer_name }, headers: { "Authorization" => "token"}
+        put customer_path(not_valid_customer_id), params: { name: new_customer_name }, headers: authorization_header
       }
 
       it 'status code' do

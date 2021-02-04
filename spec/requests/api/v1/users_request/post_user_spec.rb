@@ -3,6 +3,7 @@ require 'rails_helper'
 RSpec.describe "Api::V1::Users POST /users", type: :request do
   let(:username) { 'username' }
   let(:password) { 'password' }
+  let(:email) { 'email' }
   let(:role) { 'standard' }
   let(:total_users) { 2 }
   let(:user) { create(:user, username: username)}
@@ -14,7 +15,9 @@ RSpec.describe "Api::V1::Users POST /users", type: :request do
     context 'user does not exists' do
       
       before {
-        post users_path, params: { username: username, password: password, role: role },  headers: authorization_header(admin)
+        user_authenticated(admin.email)
+        create_user_auth0
+        post users_path, params: { email: email, username: username, password: password, role: role },  headers: authorization_header
       }
 
       it 'create new user' do
@@ -34,7 +37,9 @@ RSpec.describe "Api::V1::Users POST /users", type: :request do
 
       before {
         user
-        post users_path, params: { username: user.username },  headers: authorization_header(admin)
+        user_authenticated(admin.email)
+        conflict_create_user_auth0
+        post users_path, params: { email: email, username: user.username, password: password },  headers: authorization_header
       }
 
       it 'status code' do
@@ -48,6 +53,7 @@ RSpec.describe "Api::V1::Users POST /users", type: :request do
   context 'not authenticated admin' do
 
     before {
+      user_not_authenticated
       post users_path
     }
 
