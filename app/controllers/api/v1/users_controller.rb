@@ -24,7 +24,7 @@ class Api::V1::UsersController < ApplicationController
         render json: { error: 'Cant create user', message: 'Internal server error' }, status: :internal_server_error unless @user.persisted?
       end
     else
-      render json: { error: 'Email, username and password are required'}, status: :bad_request
+      render json: { error: 'Email, username and password are required' }, status: :bad_request
     end
   end
 

@@ -47,6 +47,19 @@ RSpec.describe "Api::V1::Users POST /users", type: :request do
       end
     end
 
+    context 'missing required field' do
+      
+      before {
+        user_authenticated(admin.email)
+        create_user_auth0
+        post users_path, params: { username: username, password: password, role: role },  headers: authorization_header
+      }
+
+      it 'status code' do
+        expect(response).to have_http_status(:bad_request)
+      end
+
+    end
 
   end
 
