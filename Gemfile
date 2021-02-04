@@ -51,6 +51,7 @@ group :test do
   gem 'shoulda-matchers', '~> 4.5.1'
   gem 'faker'
   gem 'database_cleaner'
+  gem 'webmock'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem

@@ -10,6 +10,7 @@ RSpec.describe "Api::V1::Auths", type: :request do
     context 'good login' do
 
       before {
+        login_token_mock
         post login_path, params: { username: user.username, password: password}
       }
 
@@ -18,7 +19,7 @@ RSpec.describe "Api::V1::Auths", type: :request do
       end
 
       it 'content' do
-        expect(json).to include('token')
+        expect(json).to include('access_token')
         expect(json).to include('user')
       end
     end
@@ -26,6 +27,7 @@ RSpec.describe "Api::V1::Auths", type: :request do
     context 'bad login' do
 
       before {
+        bad_login_token_mock
         post login_path, params: { username: user.username, password: bad_password }
       }
 
