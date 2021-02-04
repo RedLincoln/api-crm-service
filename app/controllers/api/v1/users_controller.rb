@@ -15,13 +15,16 @@ class Api::V1::UsersController < ApplicationController
 
   def create
     if have_required_params_for_create
-      body = AuthApiManagment.create_user(user_params)
-      if body && (body.include? "statusCode")
+      response = AuthApiManagment.create_user(user_params)
+      
+      case response.code
+      when 201
+        @user = User.create(user_params.merge(uid: JSON.parse(response.body)["user_id"]))
+        render json: { user: @user }, status: :created
+      when 409
         render json: { error: 'The user already exists' }, status: :conflict
-      elsif body
-        @user = User.create(user_params.merge(uid: body["user_id"]))  
-        render json: { user: @user }, status: :created if @user.persisted?
-        render json: { error: 'Cant create user', message: 'Internal server error' }, status: :internal_server_error unless @user.persisted?
+      else
+        render json: { error: 'Not possible to create user'}, status: :internal_server_error
       end
     else
       render json: { error: 'Email, username and password are required' }, status: :bad_request
@@ -30,15 +33,18 @@ class Api::V1::UsersController < ApplicationController
 
   def update
     @user = User.find(params[:id])
-    @user.update(user_params)
-
-    if @user.valid?
-      body =  AuthApiManagment.update_user(uid: @user.uid, update_params: user_params)
-      render json: { error: 'Cant change too many fields at the same time' }, status: :bad_request unless body
-      render json: { user: @user }, status: :ok if body
+    response =  AuthApiManagment.update_user(uid: @user.uid, update_params: user_params)
+    
+    case response.code
+    when 200
+      @user.update(user_params)
+      render json: { user: @user }, status: :ok
+    when 400
+      render json: { error: 'Bad Request', message: JSON.parse(response.body)["message"] }, status: :bad_request
     else
-      render json: { error: @user.errors }, status: :conflict
-    end  
+      render json: { error: 'Not possible to update user'}, status: :internal_server_error
+    end
+    
   end
 
   def destroy 

@@ -22,8 +22,8 @@ class ApplicationController < ActionController::API
   def logged_in_user
     if auth_token
       token = auth_token.split(' ').last
-      userinfo = AuthApiAuthentication.get_userinfo(token)
-      @user = User.find_by(email: userinfo["email"])
+      response = AuthApiAuthentication.get_userinfo(token)
+      @user = response.code == 200 ? User.find_by(email: JSON.parse(response.body)["email"]) : nil
     end
   end
 

@@ -77,6 +77,12 @@ module AuthSpecHelper
       to_return(status: 200, body: {}.to_json)
   end
 
+  def update_user_conflict_auth0
+    get_management_api_token
+    stub_request(:patch, "#{BASE_URI}/api/v2/users/").
+      to_return(status: 400, body: {}.to_json)
+  end
+
   def update_user_doesnt_exists_auth0
     get_management_api_token
     stub_request(:patch, "#{BASE_URI}/api/v2/users/").

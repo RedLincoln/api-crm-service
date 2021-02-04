@@ -26,18 +26,12 @@ class AuthApiAuthentication
 
 
     def get_userinfo(token)
-      response = Auth0Conf.get('/userinfo', {
+      Auth0Conf.get('/userinfo', {
         headers: {
           "Content-type": "application/json",
           "Authorization": "Bearer #{token}"
         }
       })
-
-      if response.code == 200
-        JSON.parse(response.body)
-      else
-        nil
-      end
     end
   end
 end

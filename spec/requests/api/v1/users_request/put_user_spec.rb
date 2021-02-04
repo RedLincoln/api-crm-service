@@ -58,12 +58,12 @@ RSpec.describe "Api::V1::Users PUT /users/:id", type: :request do
       context 'not valid update params' do
 
         before { 
-          update_user_auth0
+          update_user_conflict_auth0
           put user_path(valid_user_id), params: { username: not_valid_username }, headers: authorization_header
         }
 
         it 'status code' do
-          expect(response).to have_http_status(:conflict)
+          expect(response).to have_http_status(:bad_request)
         end
 
       end
