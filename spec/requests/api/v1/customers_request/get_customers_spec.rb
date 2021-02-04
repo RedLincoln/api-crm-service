@@ -8,10 +8,13 @@ RSpec.describe "Api::V1::Customers GET /customers", type: :request do
 
   context 'user authenticated' do
   
-    before{ user } 
+    before{
+      user
+      user_authenticated(user.email)
+    } 
 
     context 'initial state' do
-      before { get customers_path, headers: authorization_header(user)}
+      before { get customers_path, headers: { "Authorization" => "token"} }
 
       it 'no customers' do
         expect(json['customers']).to be_empty
@@ -24,7 +27,7 @@ RSpec.describe "Api::V1::Customers GET /customers", type: :request do
 
     context 'customers stored' do
         
-      before { customers; get customers_path, headers: authorization_header(user) }
+      before { customers; get customers_path, headers: { "Authorization" => "token"} }
 
       it 'return all customers' do
         expect(json['customers'].size).to be(total_customers)
@@ -38,10 +41,13 @@ RSpec.describe "Api::V1::Customers GET /customers", type: :request do
   end
 
   context 'user not authenticated' do
+
     it 'GET /customers' do
+      user_not_authenticated
       get customers_path
       expect(response).to have_http_status(:unauthorized)
     end
+
   end
 
 end

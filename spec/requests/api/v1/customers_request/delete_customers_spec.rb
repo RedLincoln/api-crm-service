@@ -8,12 +8,15 @@ RSpec.describe "Api::V1::Customers DELETE /customers/:id", type: :request do
   
   context 'user authenticated' do
 
-    before{ user; customers } 
+    before{ 
+      user; customers
+      user_authenticated(user.email)
+    } 
 
     context 'customer exist' do
 
       before {
-        delete customer_path(valid_customer_id), headers: authorization_header(user)
+        delete customer_path(valid_customer_id), headers: { "Authorization" => "token"}
       }
 
       it 'customer is deleted' do
@@ -31,7 +34,7 @@ RSpec.describe "Api::V1::Customers DELETE /customers/:id", type: :request do
       
       before {
         not_valid_id = Customer.order('id').last.try(:id).to_i + 1
-        delete customer_path(not_valid_id), headers: authorization_header(user)
+        delete customer_path(not_valid_id), headers: { "Authorization" => "token"}
       }
 
       it 'status code' do
@@ -46,6 +49,7 @@ RSpec.describe "Api::V1::Customers DELETE /customers/:id", type: :request do
   context 'user not authenticated' do
 
     it 'DELETE /customer/:id' do
+      user_not_authenticated
       delete customer_path(0)
       expect(response).to have_http_status(:unauthorized)
     end

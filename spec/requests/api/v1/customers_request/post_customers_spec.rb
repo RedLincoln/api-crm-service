@@ -5,7 +5,10 @@ RSpec.describe "Api::V1::Customers POST /customers", type: :request do
   
   context 'user authenticated' do
 
-    before{ user } 
+    before{
+      user
+      user_authenticated(user.email)
+    } 
 
     context 'create customer with valid fields' do
       let(:customer_name) { 'name '}
@@ -15,7 +18,7 @@ RSpec.describe "Api::V1::Customers POST /customers", type: :request do
           File.open(Rails.root.join('spec', 'factories', 'img', 'face_test.jpg')))
         post customers_path,
           params: {name: customer_name, surname: customer_surname, photo: photo},
-          headers: authorization_header(user)
+          headers: { "Authorization" => "token"}
       }
 
       it '' do 
@@ -35,7 +38,7 @@ RSpec.describe "Api::V1::Customers POST /customers", type: :request do
     
     context 'create customer with bad params' do
       before {
-        post customers_path, headers: authorization_header(user)
+        post customers_path, headers: { "Authorization" => "token"}
       }
 
       it '' do
@@ -54,6 +57,7 @@ RSpec.describe "Api::V1::Customers POST /customers", type: :request do
   context 'user not authenticated' do
 
     it 'POST /customers' do
+      user_not_authenticated
       post customers_path
       expect(response).to have_http_status(:unauthorized)
     end

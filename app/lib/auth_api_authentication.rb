@@ -32,7 +32,6 @@ class AuthApiAuthentication
           "Authorization": "Bearer #{token}"
         }
       })
-      puts response
 
       if response.code == 200
         JSON.parse(response.body)

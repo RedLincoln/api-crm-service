@@ -11,12 +11,15 @@ RSpec.describe "Api::V1::Customers PUT /customers/:id", type: :request do
   
   context 'user authenticated' do
 
-    before{ user; customer; customers } 
+    before{
+      user; customer; customers
+      user_authenticated(user.email)
+    } 
 
     context 'customer exists' do
 
       before {
-        put customer_path(customer.id), params: { name: new_customer_name }, headers: authorization_header(user)
+        put customer_path(customer.id), params: { name: new_customer_name }, headers: { "Authorization" => "token"}
       }
 
       it 'customer is updated' do
@@ -35,7 +38,7 @@ RSpec.describe "Api::V1::Customers PUT /customers/:id", type: :request do
 
       before {
         not_valid_customer_id = Customer.order('id').last.try(:id).to_i + 1
-        put customer_path(not_valid_customer_id), params: { name: new_customer_name }, headers: authorization_header(user)
+        put customer_path(not_valid_customer_id), params: { name: new_customer_name }, headers: { "Authorization" => "token"}
       }
 
       it 'status code' do
@@ -49,6 +52,7 @@ RSpec.describe "Api::V1::Customers PUT /customers/:id", type: :request do
   context 'user not authenticated' do
 
     it 'PUT /customer/:id' do
+      user_not_authenticated
       put customer_path(0)
       expect(response).to have_http_status(:unauthorized)
     end
