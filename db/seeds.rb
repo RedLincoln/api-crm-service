@@ -16,7 +16,7 @@ admin = Role.create!(name: 'admin', description: 'The user can manage other user
 
 user1 = User.create!(username: "redlincoln", password: "password", email: "example@example.com", role: standard)
 user2 = User.create!(username: 'Jazmyn2', password: "password2", email: "example2@example.com", role: standard)
-User.create!(username: 'admin_user', password: 'password', email: "example3@example.com", role: admin)
+User.create!(username: 'admin_user', password: 'password', email: "admin_user@test.com", role: admin)
 User.create!(username: 'test50', password: 'password', email: "test50@test.com", role: admin)
 
 

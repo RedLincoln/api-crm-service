@@ -26,7 +26,7 @@ class AuthApiManagment
       Auth0Conf.post('/api/v2/users', {
         headers: {
           "content-type": "application/json",
-          "Authorization": "Bearer #{JSON.parse(self.get_api_token)["access_token"]}"
+          "Authorization": "Bearer #{JSON.parse(self.get_api_token.body)["access_token"]}"
         },
         body: {
           connection: ENV['AUTH0_CONNECTION'],
@@ -42,7 +42,7 @@ class AuthApiManagment
     def delete_user(uid)
       response = Auth0Conf.delete(URI.encode("/api/v2/users/#{uid}"), {
         headers: {
-          "Authorization": "Bearer #{JSON.parse(self.get_api_token)["access_token"]}"
+          "Authorization": "Bearer #{JSON.parse(self.get_api_token.body)["access_token"]}"
         }
       })
 
@@ -56,7 +56,7 @@ class AuthApiManagment
       Auth0Conf.patch(URI.encode("/api/v2/users/#{uid}"), {
         headers: {
           "content-type": "application/json",
-          "Authorization": "Bearer #{JSON.parse(self.get_api_token)["access_token"]}"
+          "Authorization": "Bearer #{JSON.parse(self.get_api_token.body)["access_token"]}"
         },
         body: filtered_params.merge({
           connection: ENV['AUTH0_CONNECTION'],
@@ -66,7 +66,7 @@ class AuthApiManagment
 
     private
 
-    VALID_FIELDS = ["username", "email"]
+    VALID_FIELDS = ["username", "email", 'password']
 
     def filter_valid_update_fields(params)
       params.select { |k, v| VALID_FIELDS.include?(k) }
