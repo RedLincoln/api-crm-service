@@ -17,7 +17,7 @@ class Api::V1::CustomersController < ApplicationController
     if @customer.save
       render json: { customer: link_photo(@customer) }, status: :created
     else
-      render json: { error: 'Bad Request' }, status: :bad_request
+      render json: { error: 'Bad Request', message: @customer.errors }, status: :bad_request
     end
   end
 
