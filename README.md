@@ -29,10 +29,10 @@ This project is using <a href="https://auth0.com/">Auth0</a> to authenticate use
 For Auth0 to work the next environment variables are required:
 
 <ul>
-  <li>AUTH0_DOMAIN: Auth0 account domain</li>
-  <li>AUTH0_CLIENT_ID: Application client id</li>
-  <li>AUTH0_CLIENT_SECRET: Application client secret</li>
-  <li>AUTH0_CONNECTION: name of the connection (database) created in auth0</li>
+  <li><strong>AUTH0_DOMAIN</strong>: Auth0 account domain</li>
+  <li><strong>AUTH0_CLIENT_ID</strong>: Application client id</li>
+  <li><strong>AUTH0_CLIENT_SECRET</strong>: Application client secret</li>
+  <li><strong>AUTH0_CONNECTION</strong>: name of the connection (database) created in auth0</li>
 </ul>
 
 For authorization the gem <code>cancancan</code> is being used to manage permissions. The table <code>role</code> have been created to store the roles information and to make it easier to add new roles if necessary.
@@ -89,7 +89,11 @@ All endpoints starts with <code>/api/v1</code>
   </tr>
   <tr>
     <td>GET /auth/login</td>
-    <td>Authentication, require </td>
+    <td>
+      Authentication, fields:<br>
+      username: user email <br>
+      password: user password
+    </td>
     <td>
       200: body contains user info and access_token <br>
       401: Bad credentials
