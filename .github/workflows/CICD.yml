@@ -46,13 +46,13 @@ jobs:
       - name: Generate deploy package
         run: zip -r deploy.zip . -x '*.git'
 
-      - name: Deploy yo EB
+      - name: Deploy to EB
         uses: einaregilsson/beanstalk-deploy@v14
         with:
           aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           application_name: ${{ secrets.AWS_APP_NAME }}
           environment_name: ${{ secrets.AWS_ENV_NAME }}
-          version_label: 2
+          version_label: 3
           region: eu-west-2
           deployment_package: deploy.zip
